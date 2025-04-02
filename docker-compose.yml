@@ -6,7 +6,7 @@ volumes:
   static:
 
 services:
-  taski_db:
+  db:
     image: postgres:13.10
     env_file: .env
     volumes:
@@ -16,6 +16,8 @@ services:
     env_file: .env
     volumes:
       - static:/backend_static
+    depends_on:
+      - db
 
   frontend:
     env_file: .env
@@ -28,6 +30,9 @@ services:
     build: ./gateway/
     env_file: .env
     volumes:
-      - static:/staticfiles
+      - static:/staticfiles/
     ports:
       - 8000:80
+    depends_on:
+      - backend
+      - frontend

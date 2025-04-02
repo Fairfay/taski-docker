@@ -7,7 +7,7 @@ volumes:
 
 # Всё отличие — заменяем build на image и указываем, какой образ использовать
 services:
-  taski_db:
+  db:
     image: postgres:13.10
     env_file: .env
     volumes:
@@ -18,6 +18,8 @@ services:
     env_file: .env
     volumes:
       - static_volume:/backend_static
+    depends_on:
+      - db
 
   frontend:
     image: fairfay/taski_frontend  # Качаем с Docker Hub
@@ -33,3 +35,6 @@ services:
       - static_volume:/staticfiles/
     ports:
       - 8000:80
+    depends_on:
+      - backend
+      - frontend
